@@ -14,23 +14,20 @@ class MatrixFactorizationModel():
     def predict(self, user_id, book_id):
         user_vector = self.users[user_id]
         book_vector = self.books[book_id]
-        return 
         return np.dot(user_vector, book_vector)
     
 
-    def calculate_loss(self, predicted_rating, actual_rating):
-        return (predicted_rating - actual_rating) ** 2
 
 
     def step(self, user_id, book_id, rating):
         prediction = self.predict(user_id, book_id)
 
-        error = self.calculate_loss(prediction, rating)
+        error = prediction - rating
 
-        gradient_user = self.users[user_id] - 2 * (rating - prediction) * self.books[book_id] 
-        gradient_book = self.books[book_id] - 2 * (rating - prediction) * self.users[user_id] 
+        gradient_user = - 2 * (error) * self.books[book_id]  - 0.1 * self.users[user_id]
+        gradient_book =  - 2 * (error) * self.users[user_id]  - 0.1 * self.books[book_id]
 
-        self.users[user_id] = self.users[user_id] - self.learning_rate * gradient_user
-        self.books[book_id] = self.books[book_id] - self.learning_rate * gradient_book
+        self.users[user_id] = self.users[user_id] + self.learning_rate * gradient_user
+        self.books[book_id] = self.books[book_id] + self.learning_rate * gradient_book
 
         
