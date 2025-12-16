@@ -7,9 +7,10 @@ from fastapi import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import config
-from .db import User, TokenPair, JwtTokenSchema
+from db import User
+from db.schemas import TokenPair, JwtTokenSchema
 from .exceptions import AuthFailedException
-from .db.models import BlackListToken, User as DBUser
+from db import BlackListToken, User as DBUser
 
 REFRESH_COOKIE_NAME = "refresh"
 SUB = "sub"
@@ -18,10 +19,11 @@ IAT = "iat"
 JTI = "jti"
 
 
-def get_utc_now():return datetime.now(timezone.utc)
+def get_utc_now():
+    return datetime.now(timezone.utc)
 
 
-def create_access_token(payload: dict, minutes; int| None = None) -> JwtTokenSchema:
+def create_access_token( payload: dict, minutes: int| None = None) -> JwtTokenSchema:
     expire = get_utc_now() + timedelta(minutes= minutes or config.ACCESS_TOKEN_EXPIRE_MINUTES)
 
     payload[EXP] = expire
@@ -41,7 +43,7 @@ def create_refresh_token(payload: dict, minutes: int | None = None) -> JwtTokenS
     payload[EXP] = expire
 
     token = JwtTokenSchema(
-        token=jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM)
+        token=jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM),
         expire = expire,
         payload=payload
     )
@@ -71,7 +73,7 @@ async def decode_token_with_blacklisted(token: str, db: AsyncSession):
 
 async def refresh_token_state_with_rotation(response: Response, payload: dict, user : DBUser, db: AsyncSession):
     exp = datetime.fromtimestamp(payload.get(EXP))
-    exp.replace(tzinfo=timezone.utc)
+    exp = exp.replace(tzinfo=timezone.utc)
     black_listed = BlackListToken(
         id=payload[JTI], expire=exp
     )
@@ -100,12 +102,12 @@ def mail_token(user: User):
     return create_access_token(payload=payload, minutes=2 * 60).token
 
 
-def add_refresh_token_cookie(response: Response, token: str)
+def add_refresh_token_cookie(response: Response, token: str):
     exp = get_utc_now() + timedelta(minutes=config.REFRESH_TOKEN_EXPIRES_MINUTES)
     exp.replace(tzinfo=timezone.utc)
     response.set_cookie(
-        key=  REFRESH_COOKIE_NAME,
-        value=token
+        key= REFRESH_COOKIE_NAME,
+        value=token,
         expires=int(exp.timestamp()),
         httponly=True,
     )

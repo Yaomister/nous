@@ -1,6 +1,6 @@
 from sqlalchemy.sql import expression
 from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.types import datetime
+from sqlalchemy.types import DateTime
 
 class utcnow(expression.FunctionElement):
     type: DateTime()

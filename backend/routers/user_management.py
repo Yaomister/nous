@@ -11,9 +11,9 @@ from pydantic import ValidationError
 from db import get_db
 from db import schemas, models
 from config import REFRESH_TOKEN_ROTATION
-from hash import get_password_hash, verify_password
-from jwt import (
-    create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, reresh_token_state_without_rotation, add_refresh_token_cookie, mail_token, SUB, JTI, EXP
+from auth import get_password_hash
+from auth.jwt import (
+    create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, add_refresh_token_cookie, mail_token, SUB, JTI, EXP
 )
 
 from auth import BadRequestException, NotFoundException, AuthFailedException
@@ -25,7 +25,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 
-@router.pos("/register", response_model=schemas.SuccessResponseSchema, status_code=201)
+@router.post("/register", response_model=schemas.SuccessResponseSchema, status_code=201)
 async def register(
     data: schemas.UserRegister,
     bg_task: BackgroundTasks,
@@ -67,26 +67,6 @@ async def login(
     return {"token": token_pair.access.token}
 
 
-
-@router.post("/login")
-async def login(data: schemas.UserLogin, response: Response, db: AsyncSession = Depends(get_db)):
-
-    user = await models.User.authenticate(db = db, email =data.email, password=data.password)
-    
-    if not user:
-        raise BadRequestException("Incorrect email or password")
-    
-    if not user.is_active:
-        raise ForbiddenException("Inactive user")
-    
-    user = schemas.User.from_orm(user)
-
-    token_pair = create_token_pair(user=user)
-
-    add_refresh_token_cookie(response=response, token= token_pair.token)
-
-    return {"token": token_pair.access.token}
-
 @router.post("refresh")
 async def refresh(
     response: Response,
@@ -121,7 +101,7 @@ async def verify(token: str, db: AsyncSession = Depends(get_db)):
     await user.save(db=db)
     return {"msg": "Successfully activated"}
 
-@router.post("/logout", response_model= schemas.SuccessResponseScheme)
+@router.post("/logout", response_model= schemas.SuccessResponseSchema)
 async def logout(
     token: Annotated[str, Depends(oauth2_scheme)],
     db: AsyncSession= Depends(get_db)
@@ -136,28 +116,28 @@ async def logout(
 
     return {"msg" : "Successfully logout"}
 
-@router.post("/forgot-password", response_model=schemas.SuccessResponseScheme)
+@router.post("/forgot-password", response_model=schemas.SuccessResponseSchema)
 async def forgot_password(
     data: schemas.ForgotPasswordSchema,
     bg_task: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ):
-    user = await models.User.find_by_email(db=db, email = data.email)
-    if user:
-        user_schema = schemas.User.from_orm(user)
-        reset_token=mail_token(user_schema)
-        mail_task_data = schemas.MailTaskSchema(
-            user=user_schema,
-            body=schemas.MailBodySchema(type="password-reset", token=reset_token)
-        )
-        # bg_task.add_task(user_mail_event, mail_task_data)
+    # user = await models.User.find_by_email(db=db, email = data.email)
+    # if user:
+    #     user_schema = schemas.User.from_orm(user)
+    #     reset_token=mail_token(user_schema)
+    #     mail_task_data = schemas.MailTaskSchema(
+    #         user=user_schema,
+    #         body=schemas.MailBodySchema(type="password-reset", token=reset_token)
+    #     )
+    #   bg_task.add_task(user_mail_event, mail_task_data)
 
     return {"msg" : "Reset token sended successfully to your email"}
 
-@router.post("/password-reset", response_model=schemas.SuccessResponseScheme)
+@router.post("/password-reset", response_model=schemas.SuccessResponseSchema)
 async def password_reset_token(
     token: str,
-    data: schemas.PasswordResetSchemas,
+    data: schemas.PasswordResetSchema,
     db: AsyncSession = Depends(get_db),
 ):
     payload = await decode_token_with_blacklisted(token=token,db=db)
@@ -170,7 +150,7 @@ async def password_reset_token(
 
     return {"msg": "Password successfully updated"}
 
-@router.post("/password-update", response_model=schemas.SuccessResponseScheme)
+@router.post("/password-update", response_model=schemas.SuccessResponseSchema)
 async def password_update(
     token: Annotated[str, Depends(oauth2_scheme)],
     data: schemas.PasswordUpdateSchema,

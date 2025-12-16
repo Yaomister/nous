@@ -1,3 +1,4 @@
+
 from typing import Any
 from datetime import datetime
 from pydantic import BaseModel, UUID4, validator, EmailStr
@@ -32,36 +33,36 @@ class UserRegister(UserBase):
         return value
 
     
-    class UserLogin(BaseModel):
-        email: EmailStr
-        password: str
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
-    class JwtTokenSchema(BaseModel):
-        token: str
-        payload: dict
-        expire: datetime
+class JwtTokenSchema(BaseModel):
+    token: str
+    payload: dict
+    expire: datetime
 
-    class TokenPair(BaseModel):
-        access: JwtTokenSchema
-        refresh: JwtTokenSchema
+class TokenPair(BaseModel):
+    access: JwtTokenSchema
+    refresh: JwtTokenSchema
 
-    class RefreshToken(BaseModel):
-        refresh: str
+class RefreshToken(BaseModel):
+    refresh: str
 
-    class SuccessResponseSchema(BaseModel):
-        msg: str
+class SuccessResponseSchema(BaseModel):
+    msg: str
 
-    class BlackListToken(BaseModel):
-        id: UUID4
-        expire: datetime
+class BlackListToken(BaseModel):
+    id: UUID4
+    expire: datetime
 
 
-        class Config: 
-            orm_modew
+    class Config: 
+        orm_mode: bool
 
-    class MailBodySchema(BaseModel):
-        token: str
-        type: str
+class MailBodySchema(BaseModel):
+    token: str
+    type: str
 
 class EmailSchema(BaseModel):
     recipient: list[EmailStr]
@@ -82,14 +83,14 @@ class PasswordResetSchema(BaseModel):
     password: str
     confirm_password: str
 
-    @validator("confirm_password")
-    def verify_password_match(cls, value, values, **kwargs):
-        password = values.get("password")
+@validator("confirm_password")
+def verify_password_match(cls, value, values, **kwargs):
+    password = values.get("password")
 
-        if (value != password):
-            raise ValueError("The two passwords did not match.")
+    if (value != password):
+        raise ValueError("The two passwords did not match.")
 
-        return value
+    return value
 
 class PasswordUpdateSchema(PasswordResetSchema):
     old_password: str
@@ -97,10 +98,10 @@ class PasswordUpdateSchema(PasswordResetSchema):
 class OldPasswordErrorSchema(BaseModel):
     old_password: bool
 
-    @validator("old_password")
-    def check_old_password_status(cls, value, values, **kwargs):
-        if not value:
-            raise ValueError("Old password is not correct")
+@validator("old_password")
+def check_old_password_status(cls, value, values, **kwargs):
+    if not value:
+        raise ValueError("Old password is not correct")
 
 
 class BookRatingCreateSchema(BaseModel):

@@ -12,16 +12,15 @@ from sqlalchemy.orm import DeclarativeBase
 
 POSTGRES_URL = PostgresDsn.build(
     scheme="postgresql+asyncpg",
-    user=config.POSTGRES_USER,
     password=config.POSTGRES_PASSWORD,
     host=config.POSTGRES_HOST,
-    port=config.POSTGRES_PORT,
+    port=int(config.POSTGRES_PORT),
     path=f"/{config.POSTGRES_DB}",
 )
 
 
 
-engine = create_async_engine(POSTGRES_URL, future=True, echo=True)
+engine = create_async_engine(str(POSTGRES_URL), future=True, echo=True)
 
 SessionFactory = async_sessionmaker(engine, autoflush=False, expire_on_commit=False)
 
@@ -35,7 +34,7 @@ class Base(AsyncAttrs, DeclarativeBase):
 
         except SQLAlchemyError as e:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=repr(ex)
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=repr(e)
             ) from e
 
     @classmethod
