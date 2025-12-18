@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 import config
 from db import User
-from db.schemas import TokenPair, JwtTokenSchema
+from db import TokenPair, JwtTokenSchema
 from .exceptions import AuthFailedException
 from db import BlackListToken, User as DBUser
 

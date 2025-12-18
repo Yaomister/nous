@@ -1,3 +1,10 @@
+import { Outlet } from "react-router-dom";
+import "./stylesheets/page.css";
+
 export const Page = () => {
-  return <div>Page</div>;
+  return (
+    <div className="page">
+      <Outlet />
+    </div>
+  );
 };

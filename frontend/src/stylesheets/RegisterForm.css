@@ -1,0 +1,48 @@
+.register-form-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 60%;
+}
+.register-form-title {
+  font-size: 1.5em;
+  font-family: var(--font-secondary);
+  font-weight: 200;
+  width: 100%;
+}
+
+.register-field {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.register-field label {
+  font-family: var(--font-primary);
+}
+
+.register-terms-and-services-text {
+  width: 80%;
+  line-height: 1.5;
+  font-size: 1em;
+}
+
+.register-form-buttons-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .register-form-wrapper {
+    width: 90%;
+  }
+}

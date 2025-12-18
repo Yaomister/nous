@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Page } from "./page.jsx";
+import { Page } from "./Page.jsx";
 import { Login } from "./pages/Login.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
+import { Register } from "./pages/Register.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const App = () => {
         {
           path: "/login",
           element: <Login></Login>,
+        },
+        {
+          path: "/register",
+          element: <Register></Register>,
         },
       ],
     },

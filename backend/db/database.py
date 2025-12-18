@@ -10,19 +10,25 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import DeclarativeBase
 
 
+
+
 POSTGRES_URL = PostgresDsn.build(
     scheme="postgresql+asyncpg",
+    username=config.POSTGRES_USER,
     password=config.POSTGRES_PASSWORD,
     host=config.POSTGRES_HOST,
     port=int(config.POSTGRES_PORT),
-    path=f"/{config.POSTGRES_DB}",
+    path=config.POSTGRES_DB,
 )
+
 
 
 
 engine = create_async_engine(str(POSTGRES_URL), future=True, echo=True)
 
 SessionFactory = async_sessionmaker(engine, autoflush=False, expire_on_commit=False)
+
+print("API DB:", str(POSTGRES_URL))
 
 
 

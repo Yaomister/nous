@@ -1,0 +1,55 @@
+:root {
+  --primary-background-color: #131314;
+  --secondary-background-color: #1c1c1d;
+  --inner-filling-color: #202021;
+  --text-color-primary: #c8d1d4;
+  --text-color-secondary: #9b9aa2;
+  --submit-button-color: rgb(107, 106, 111);
+  --font-primary: "Inconsolata", monospace;
+  --font-secondary: "Inter", sans-serif;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.page {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--primary-background-color);
+  overflow: hidden;
+  font-family: var(--font-secondary);
+}
+
+p,
+a,
+h4,
+h5,
+label {
+  color: var(--text-color-primary);
+}
+
+p,
+a,
+h4,
+h5,
+label,
+button {
+  font-family: var(--font-primary);
+  transition: 0.3s ease-in-out;
+}
+
+a:hover,
+button:hover {
+  color: white;
+}
+
+h4 {
+  font-weight: 500;
+}
+
+.logo {
+  font-family: "Cedarville Cursive", cursive;
+  margin: 0 1rem;
+}

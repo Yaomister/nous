@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import select, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncSession
-from .database import Base
+from db import Base
 from auth import verify_password
 from auth.utils import utcnow
 
@@ -20,6 +20,8 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(
         server_default=utcnow(), server_onupdate=utcnow(), onupdate=utcnow()
     )
+
+
 
     @classmethod
     async def find_by_email(cls, db: AsyncSession, email:str):
