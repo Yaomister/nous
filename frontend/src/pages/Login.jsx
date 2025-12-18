@@ -1,13 +1,13 @@
-import { useFormik } from "formik";
+import { LoginForm } from "../components/LoginForm";
+import "../stylesheets/Login.css";
 
 export const Login = () => {
-  const formuk = useFormik({
-    initialValues: {
-      username: "",
-      password: "",
-    },
-    validateOnBlur: false,
-    validateOnChange: false,
-  });
-  return <div className="login-page-wrapper"></div>;
+  return (
+    <div className="login-page-wrapper">
+      <div className="register-page-left"></div>
+      <div className="register-page-right">
+        <LoginForm />
+      </div>
+    </div>
+  );
 };

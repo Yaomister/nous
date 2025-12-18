@@ -24,8 +24,9 @@ export const RegisterForm = () => {
             console.error(api.getUri());
             const { status } = await api.post("/user/register", values);
             if (status == 201) {
-              toast.success("Successfully registered!");
-              navigate("/");
+              toast.success("Successfully registered!", {
+                onClose: () => navigate("/"),
+              });
             }
           } catch (e) {
             console.error(e);
@@ -40,7 +41,7 @@ export const RegisterForm = () => {
               className="dark-themed-form register-form"
             >
               <h4 className="register-form-title">Join our community</h4>
-              <div className="register-field">
+              <div className="field">
                 <label htmlFor="email">Email address</label>
                 <input
                   type="text"
@@ -52,7 +53,7 @@ export const RegisterForm = () => {
                   id="email"
                 />
               </div>
-              <div className="register-field">
+              <div className="field">
                 <label htmlFor="username">Username</label>
                 <input
                   type="text"
@@ -64,7 +65,7 @@ export const RegisterForm = () => {
                   placeholder="johndoe"
                 />
               </div>
-              <div className="register-field">
+              <div className="field">
                 <label htmlFor="password">Password</label>
                 <input
                   type="password"

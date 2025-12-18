@@ -1,0 +1,28 @@
+.login-page-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.login-page-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+
+.login-page-left {
+  width: 50%;
+  background: var(--inner-filling-color);
+}
+
+@media (max-width: 1024px) {
+  .login-page-left {
+    width: 0%;
+  }
+  .login-page-right {
+    width: 100%;
+  }
+}

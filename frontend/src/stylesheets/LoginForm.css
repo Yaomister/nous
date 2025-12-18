@@ -1,38 +1,38 @@
-.register-form-wrapper {
+.login-form-wrapper {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.register-form {
+.login-form {
   display: flex;
   flex-direction: column;
   gap: 1em;
   width: 60%;
 }
-.register-form-title {
+
+.login-form-title-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.login-form-title {
   font-size: 1.5em;
   font-family: var(--font-secondary);
   font-weight: 200;
   width: 100%;
+  margin: 0;
 }
 
-.register-terms-and-services-text {
-  width: 80%;
-  line-height: 1.5;
+.login-form-subtitle {
   font-size: 1em;
 }
 
-.register-form-buttons-wrapper {
-  width: 100%;
+.login-password-label-wrapper {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-}
-
-@media (max-width: 768px) {
-  .register-form-wrapper {
-    width: 90%;
-  }
 }

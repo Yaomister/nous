@@ -40,3 +40,21 @@ input {
   transition: 0.3s ease-in-out;
   opacity: 1;
 }
+
+.dark-themed-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.dark-themed-form .field label {
+  font-family: var(--font-primary);
+}
+
+.dark-themed-form .form-buttons-wrapper {
+  margin-top: 1em;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

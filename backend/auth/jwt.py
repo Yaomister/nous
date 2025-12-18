@@ -24,12 +24,12 @@ def get_utc_now():
 
 
 def create_access_token( payload: dict, minutes: int| None = None) -> JwtTokenSchema:
-    expire = get_utc_now() + timedelta(minutes= minutes or config.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = get_utc_now() + timedelta(minutes= minutes or config.ACCESS_TOKEN_EXPIRES_MINUTES)
 
     payload[EXP] = expire
 
     token = JwtTokenSchema(
-        token=jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM),
+        token=jwt.encode(payload, config.SECRET_KEY, algorithm=config.ALGORITHM),
         expire = expire,
         payload = payload
     )
