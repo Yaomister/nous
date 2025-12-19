@@ -40,7 +40,7 @@ class User(Base):
 class BlackListToken(Base):
     __tablename__ = "blacklist_tokens"
     id: Mapped[uuid.UUID] = mapped_column(
-        primary_key=True, default=uuid.uuid4
+        primary_key=True, default=uuid.uuid4, index=True
     )
     expire: Mapped[datetime]
     created_at : Mapped[datetime] = mapped_column(server_default=utcnow())

@@ -1,13 +1,11 @@
-import { RegisterForm } from "../components/RegisterForm";
+import { RecoverForm } from "../components/RecoverForm";
 
-import "../stylesheets/FormPage.css";
-
-export const Register = () => {
+export const Recover = () => {
   return (
     <div className="form-page-wrapper">
       <div className="form-page-left"></div>
       <div className="form-page-right">
-        <RegisterForm />
+        <RecoverForm />
       </div>
     </div>
   );

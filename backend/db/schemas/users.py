@@ -80,24 +80,8 @@ class SuccessResponseSchema(BaseModel):
 class BlackListToken(BaseModel):
     id: UUID4
     expire: datetime
-
-
     class Config: 
         orm_mode: bool
-
-class MailBodySchema(BaseModel):
-    token: str
-    type: str
-
-class EmailSchema(BaseModel):
-    recipient: list[EmailStr]
-    subject: str
-    body: MailBodySchema
-
-
-class MailTaskSchema(BaseModel):
-    user: UserBase
-    body: MailBodySchema
 
 
 class ForgotPasswordSchema(BaseModel):
@@ -107,6 +91,7 @@ class ForgotPasswordSchema(BaseModel):
 class PasswordResetSchema(BaseModel):
     password: str
     confirm_password: str
+    
 
 @field_validator("confirm_password")
 def verify_password_match(cls, value, values, **kwargs):

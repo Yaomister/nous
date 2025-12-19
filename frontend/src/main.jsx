@@ -7,6 +7,8 @@ import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import { Register } from "./pages/Register.jsx";
 import { AuthProvider } from "./components/AuthContext.jsx";
+import { Recover } from "./pages/Recover.jsx";
+import { ResetPassword } from "./pages/ResetPassword.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -20,6 +22,14 @@ const App = () => {
         {
           path: "/register",
           element: <Register></Register>,
+        },
+        {
+          path: "/recover",
+          element: <Recover></Recover>,
+        },
+        {
+          path: "/reset-password/:token",
+          element: <ResetPassword></ResetPassword>,
         },
       ],
     },

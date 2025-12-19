@@ -5,8 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from db import SuccessResponseSchema, schemas
+from db import SuccessResponseSchema, ForgotPasswordSchema, schemas
 from db.models import User
+from mail import send_reset_email
 
 
 from pydantic import ValidationError
@@ -16,7 +17,7 @@ from db import User
 from config import REFRESH_TOKEN_ROTATION
 from auth import get_password_hash
 from auth.jwt import (
-    create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, add_refresh_token_cookie, mail_token, SUB, JTI, EXP
+    create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, add_refresh_token_cookie, mail_token, SUB, JTI, EXP, TYP
 )
 
 import logging
@@ -32,6 +33,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 @router.post("/register", response_model=schemas.User, status_code=201)
 async def register(
     data: schemas.UserRegister,
+    bg_task: BackgroundTasks,
     db: AsyncSession =  Depends(get_db)
 ):
 
@@ -49,7 +51,12 @@ async def register(
    user = User(**user_data)
    await user.save(db = db)
    
-   user_schema = schemas.User.from_orm(user)
+   user_schema = schemas.User.model_validate(user)
+
+   verify_token = mail_token(user_schema)
+
+   bg_task.add_task(send_reset_email, data.email, "www.google.com")
+
 
    return user_schema
     
@@ -76,6 +83,45 @@ async def login(
 
     return {"token" : token_Pair.access.token}
     
+
+
+@router.post("/reset-password-link")
+async def send_reset_password_link(
+    data: ForgotPasswordSchema,
+    bg_task: BackgroundTasks, 
+    db: AsyncSession = Depends(get_db)
+):
+    user = await User.find_by_email(db = db, email=data.email)
+    if user:
+        user_schema = schemas.User.model_validate(user)
+        reset_token = mail_token(user_schema, "reset password")
+       
+       
+        bg_task.add_task(send_reset_email, data.email, f"http://localhost:5173/reset-password/{reset_token}")
+        
+        return {"msg" : "Reset token sended successfully to your email"}
+    else:
+        raise BadRequestException("Email not registered")
+
+
+@router.post("/reset-password", response_model=schemas.SuccessResponseSchema)
+async def reset_password(
+    token: str,
+    data: schemas.PasswordResetSchema,
+    db: AsyncSession = Depends(get_db)
+):
+    payload = await decode_token_with_blacklisted(token=token, db=db)
+    user = await User.find_by_id(db=db, id = payload[SUB])
+    if not user:
+        raise NotFoundException(detail="User not found")
+    print(payload[TYP])
+    if payload[TYP] != "reset password":
+        raise BadRequestException(detail="Invalid reset token")
+    
+    user.password = get_password_hash(data.password)
+    await user.save(db=db)
+
+    return {"msg" : "Password successfully updated"}
 
 
 # @router.post("refresh")
@@ -127,39 +173,8 @@ async def login(
 
 #     return {"msg" : "Successfully logout"}
 
-# @router.post("/forgot-password", response_model=userSchemas.SuccessResponseSchema)
-# async def forgot_password(
-#     data: userSchemas.ForgotPasswordSchema,
-#     bg_task: BackgroundTasks,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     # user = await models.User.find_by_email(db=db, email = data.email)
-#     # if user:
-#     #     user_schema = schemas.User.from_orm(user)
-#     #     reset_token=mail_token(user_schema)
-#     #     mail_task_data = schemas.MailTaskSchema(
-#     #         user=user_schema,
-#     #         body=schemas.MailBodySchema(type="password-reset", token=reset_token)
-#     #     )
-#     #   bg_task.add_task(user_mail_event, mail_task_data)
 
-#     return {"msg" : "Reset token sended successfully to your email"}
 
-# @router.post("/password-reset", response_model=userSchemas.SuccessResponseSchema)
-# async def password_reset_token(
-#     token: str,
-#     data: userSchemas.PasswordResetSchema,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     payload = await decode_token_with_blacklisted(token=token,db=db)
-#     user = await userSchemas.User.find_by_id(db=db, id=payload[SUB])
-#     if not user:
-#         raise NotFoundException(detail="UserNotFound")
-    
-#     user.password = get_password_hash(data.password)
-#     await user.save(db=db)
-
-#     return {"msg": "Password successfully updated"}
 
 # @router.post("/password-update", response_model=userSchemas.SuccessResponseSchema)
 # async def password_update(

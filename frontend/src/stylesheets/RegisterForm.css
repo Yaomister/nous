@@ -16,6 +16,7 @@
   font-family: var(--font-secondary);
   font-weight: 200;
   width: 100%;
+  color: var(--text-color-secondary);
 }
 
 .register-terms-and-services-text {

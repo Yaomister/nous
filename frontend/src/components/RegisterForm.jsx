@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import "../stylesheets/Forms.css";
 import "../stylesheets/RegisterForm.css";
-import { Verify } from "../helpers/RegisterHelpers";
+import { verifyRegister } from "../helpers/UserManagementHelpers";
 import toast, { Toaster } from "react-hot-toast";
 import { api } from "../axios";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ export const RegisterForm = () => {
       <Formik
         initialValues={{ username: "", password: "", email: "" }}
         onSubmit={async (values) => {
-          const errors = Verify({ ...values });
+          const errors = verifyRegister({ ...values });
 
           if (errors.length > 0) {
             return toast.error(errors[0]);
@@ -25,7 +25,7 @@ export const RegisterForm = () => {
             const { status } = await api.post("/user/register", values);
             if (status == 201) {
               toast.success("Successfully registered!", {
-                onClose: () => navigate("/"),
+                onClose: () => navigate("/login"),
               });
             }
           } catch (e) {

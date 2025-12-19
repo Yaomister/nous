@@ -10,14 +10,14 @@ import config
 from db import User
 from db import TokenPair, JwtTokenSchema
 from .exceptions import AuthFailedException
-from db import BlackListToken, User as DBUser
+from db import models, User as DBUser
 
 REFRESH_COOKIE_NAME = "refresh"
 SUB = "sub"
 EXP = "exp"
 IAT = "iat"
 JTI = "jti"
-
+TYP = "typ"
 
 def get_utc_now():
     return datetime.now(timezone.utc)
@@ -61,8 +61,8 @@ def create_token_pair(user : User) -> TokenPair:
 
 async def decode_token_with_blacklisted(token: str, db: AsyncSession):
     try:
-        payload = jwt.decode(token, config.JWT_SECRET_KEY, algorithms=[config.ALGORITHM])
-        blacklist_token = await BlackListToken.find_by_id(db, payload.get(JTI))
+        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+        blacklist_token = await models.BlackListToken.find_by_id(db=db, id=payload.get(JTI))
         if (blacklist_token):
             raise JWTError("Token has been blacklisted")
         
@@ -97,8 +97,10 @@ async def refresh_token_state_without_rotation(token: str):
 
 
 
-def mail_token(user: User):
-    payload = {SUB: str(user.id), JTI: str(uuid.uuid4()), IAT : get_utc_now()}
+def mail_token(user: User, type: Optional[str]):
+    payload = { SUB: str(user.id), JTI: str(uuid.uuid4()), IAT : get_utc_now(), TYP: ""}
+    if type is not None:
+        payload[TYP] = type
     return create_access_token(payload=payload, minutes=2 * 60).token
 
 

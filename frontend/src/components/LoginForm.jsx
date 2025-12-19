@@ -60,7 +60,7 @@ export const LoginForm = () => {
             <div className="field">
               <div className="login-password-label-wrapper">
                 <label htmlFor="password">Password</label>
-                <a href="/recovert">Forgot password?</a>
+                <a href="/recover">Forgot password?</a>
               </div>
               <input
                 type="password"

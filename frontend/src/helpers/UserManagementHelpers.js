@@ -1,4 +1,4 @@
-export const Verify = (fields) => {
+export const verifyRegister = (fields) => {
   const { username, password, email } = fields;
   const errors = [];
   const usernameVerify = verifyUsername(username);
@@ -8,6 +8,20 @@ export const Verify = (fields) => {
   const passwordVerify = verifyPassword(password);
   if (!passwordVerify.valid) errors.push(passwordVerify.error);
   return errors;
+};
+
+export const verifyResetPassword = (fields) => {
+  const { password, confirm_password: confirmPassword } = fields;
+
+  const passwordVerify = verifyPassword(password);
+  if (!passwordVerify.valid) {
+    return [passwordVerify.error];
+  }
+
+  if (password != confirmPassword) {
+    return ["Passwords do not match"];
+  }
+  return [];
 };
 
 const verifyUsername = (username) => {
