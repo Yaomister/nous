@@ -1,0 +1,83 @@
+.log-form-wrapper {
+  width: 100%;
+  height: 40vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.log-form-cover-wrapper {
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.log-form-cover-wrapper .book-cover {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.log-form-review-wrapper {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.log-form-review-wrapper .book-title {
+  font-size: 1.5em;
+  font-weight: 200;
+}
+
+.log-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.log-form .checkbox-fields {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.log-form .checkbox-fields .checkbox-field {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+}
+
+.log-form .review {
+  border-radius: 5px;
+  border: 1px rgba(255, 255, 255, 0.5) solid;
+  background-color: var(--secondary-background-color);
+  height: 12em;
+  color: var(--text-color-secondary);
+}
+
+.log-form .other-ratings {
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5em;
+}
+
+.log-form .star-rating-field-wrapper,
+.log-form .like-button-field-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.log-form .star-rating-field-wrapper p,
+.log-form .like-button-field-wrapper p {
+  font-size: 12px;
+}
+
+.log-form .like-button-field-wrapper svg {
+}

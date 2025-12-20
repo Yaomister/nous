@@ -1,0 +1,142 @@
+.book-details-page-wrapper {
+  height: auto;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.book-details-top-half {
+  width: 70vw;
+  height: 30vh;
+  padding: 2em;
+  display: flex;
+  flex-direction: row;
+  margin-top: 7.5%;
+  padding-bottom: 5%;
+  border-bottom: 1px rgba(255, 255, 255, 0.5) solid;
+}
+
+.book-details-progress-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+}
+
+.book-details-progress-wrapper .progress-buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.book-details-progress-wrapper .title {
+  font-size: 2em;
+  color: var(--text-color-secondary);
+  font-family: var(--font-secondary);
+  font-weight: 200;
+  margin: 0;
+}
+
+.book-details-cover-wrapper {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.book-details-cover-wrapper .book-cover {
+  height: 100%;
+  border-radius: 5px;
+}
+
+.progress-button-field {
+  margin-top: 2rem;
+  width: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-button-field button {
+  width: 80%;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-button-field button:hover {
+  transform: translateY(-5px);
+}
+
+.progress-button-field p {
+  font-weight: 100;
+}
+
+.progress-button-field {
+  color: rgba(255, 255, 255, 0.5);
+}
+.heart-icon .bookmark-icon .eye-icon {
+  width: 100%;
+}
+
+.book-details-bottom-half {
+  height: 70vh;
+  width: 70vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 15rem;
+}
+
+.book-description-wrapper {
+  height: auto;
+  width: 60%;
+  gap: 2rem;
+}
+
+.book-description-wrapper .description-title {
+  font-size: 1.2em;
+  font-family: var(--font-secondary);
+  font-weight: 200;
+}
+
+.book-description-wrapper .description {
+  color: var(--text-color-secondary);
+  font-size: 0.9em;
+  line-height: 1.5em;
+}
+
+.book-ratings-wrapper {
+  width: 30%;
+
+  height: 500px;
+}
+
+.book-description-wrapper .details-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 50%;
+}
+
+.book-description-wrapper .details-wrapper .details-title {
+  font-size: 1.2em;
+  font-weight: 200;
+}
+
+.book-description-wrapper .details-wrapper .details-field {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-description-wrapper .details-wrapper .details-field h4 {
+  font-size: 1em;
+  font-weight: 300;
+}

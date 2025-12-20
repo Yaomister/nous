@@ -9,6 +9,8 @@ import { Register } from "./pages/Register.jsx";
 import { AuthProvider } from "./components/AuthContext.jsx";
 import { Recover } from "./pages/Recover.jsx";
 import { ResetPassword } from "./pages/ResetPassword.jsx";
+import { BookCatalog } from "./pages/BookCatalog.jsx";
+import { BookDetails } from "./pages/BookDetails.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -30,6 +32,14 @@ const App = () => {
         {
           path: "/reset-password/:token",
           element: <ResetPassword></ResetPassword>,
+        },
+        {
+          path: "/explore/books",
+          element: <BookCatalog></BookCatalog>,
+        },
+        {
+          path: "/book/:id",
+          element: <BookDetails></BookDetails>,
         },
       ],
     },

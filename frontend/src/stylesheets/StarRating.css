@@ -1,0 +1,19 @@
+.star-rating-wrapper {
+  display: inline-flex;
+  gap: 0.2em;
+  height: 100%;
+  font-size: 1rem;
+}
+
+.star {
+  fill: #444;
+}
+
+.star.active {
+  fill: rgb(66, 185, 26);
+}
+
+.star.half {
+  fill: rgb(66, 185, 26);
+  clip-path: inset(0 50% 0 0);
+}

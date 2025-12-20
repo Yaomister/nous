@@ -5,6 +5,8 @@
   --text-color-primary: #c8d1d4;
   --text-color-secondary: #9b9aa2;
   --submit-button-color: rgb(107, 106, 111);
+  --active-button-color: rgba(38, 180, 69, 0.5);
+
   --font-primary: "Inconsolata", monospace;
   --font-secondary: "Inter", sans-serif;
 }
@@ -12,13 +14,14 @@
 body {
   padding: 0;
   margin: 0;
+  background-color: var(--primary-background-color);
 }
 
 .page {
   width: 100vw;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   background-color: var(--primary-background-color);
-  overflow: hidden;
   font-family: var(--font-secondary);
 }
 
@@ -38,6 +41,7 @@ label,
 button {
   font-family: var(--font-primary);
   transition: 0.3s ease-in-out;
+  color: var(--text-color-secondary);
 }
 
 a:hover,
@@ -52,4 +56,17 @@ h4 {
 .logo {
   font-family: "Cedarville Cursive", cursive;
   margin: 0 1rem;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  transition: 0.3s ease-in-out;
+}
+
+button:hover {
+  border: 1px solid var(--active-button-color);
+  color: var(--active-button-color);
 }
