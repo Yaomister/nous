@@ -1,0 +1,49 @@
+.histogram-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+  gap: 1em;
+  margin: 0 auto;
+}
+
+.histogram-bars {
+  display: flex;
+  gap: 0.1em;
+  padding: 0.5em;
+  height: 6em;
+  align-items: flex-end;
+}
+
+.histogram-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1.3em;
+  height: 90%;
+  justify-content: flex-end;
+}
+
+.histogram-bar-fill {
+  width: 100%;
+  background-color: var(--secondary-background-color);
+  border-radius: 4px 4px 0 0;
+  transition: 0.3s ease-in-out;
+}
+
+.histogram-bar-fill:hover {
+  background-color: var(--active-color);
+}
+
+.five-star-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.five-star-wrapper h4 {
+  font-size: 1.5em;
+  font-weight: 200;
+  margin-bottom: 0.5em;
+}

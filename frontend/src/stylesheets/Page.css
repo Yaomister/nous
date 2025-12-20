@@ -5,7 +5,7 @@
   --text-color-primary: #c8d1d4;
   --text-color-secondary: #9b9aa2;
   --submit-button-color: rgb(107, 106, 111);
-  --active-button-color: rgba(38, 180, 69, 0.5);
+  --active-color: rgba(38, 180, 69, 0.5);
 
   --font-primary: "Inconsolata", monospace;
   --font-secondary: "Inter", sans-serif;
@@ -44,6 +44,12 @@ button {
   color: var(--text-color-secondary);
 }
 
+h3 {
+  font-family: var(--font-secondary);
+  font-weight: 200;
+  color: var(--text-color-secondary);
+}
+
 a:hover,
 button:hover {
   color: white;
@@ -67,6 +73,6 @@ button {
 }
 
 button:hover {
-  border: 1px solid var(--active-button-color);
-  color: var(--active-button-color);
+  border: 1px solid var(--active-color);
+  color: var(--active-color);
 }

@@ -99,8 +99,6 @@
 
 .book-description-wrapper .description-title {
   font-size: 1.2em;
-  font-family: var(--font-secondary);
-  font-weight: 200;
 }
 
 .book-description-wrapper .description {
@@ -111,20 +109,17 @@
 
 .book-ratings-wrapper {
   width: 30%;
-
-  height: 500px;
+  height: fit-content;
 }
 
+.book-ratings-title {
+  width: 100%;
+}
 .book-description-wrapper .details-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0;
   width: 50%;
-}
-
-.book-description-wrapper .details-wrapper .details-title {
-  font-size: 1.2em;
-  font-weight: 200;
 }
 
 .book-description-wrapper .details-wrapper .details-field {
@@ -139,4 +134,12 @@
 .book-description-wrapper .details-wrapper .details-field h4 {
   font-size: 1em;
   font-weight: 300;
+}
+
+.book-ratings-top-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }

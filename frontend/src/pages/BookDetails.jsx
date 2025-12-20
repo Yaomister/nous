@@ -5,6 +5,7 @@ import "../stylesheets/BookDetails.css";
 import { BookmarkIcon, EyeIcon, HeartIcon } from "../components/Icons";
 import { Modal } from "../components/Modal";
 import { LogForm } from "../components/LogForm";
+import { Histogram } from "../components/Histogram";
 
 export const BookDetails = () => {
   const { id } = useParams();
@@ -57,7 +58,7 @@ export const BookDetails = () => {
       <div className="book-details-bottom-half">
         {showDetailsPage ? (
           <div className="book-description-wrapper">
-            <h4 className="description-title">Description</h4>
+            <h3 className="description-title">Description</h3>
             <p className="description">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae
               sapien sed risus porttitor tempus. Sed aliquet purus quis metus
@@ -94,7 +95,7 @@ export const BookDetails = () => {
             </p>
 
             <div className="details-wrapper">
-              <h4 className="details-title">Details</h4>
+              <h3 className="details-title">Details</h3>
               <div className="details-field">
                 <h4>Pages</h4>
                 <p>100</p>
@@ -117,7 +118,16 @@ export const BookDetails = () => {
           <div className="book-reviews-wrapper"></div>
         )}
 
-        <div className="book-ratings-wrapper"></div>
+        <div className="book-ratings-wrapper">
+          <div className="book-ratings-top-bar">
+            <h3 className="book-ratings-title">Book ratings</h3>
+            <p>283</p>
+          </div>
+          <Histogram
+            ratings={[3, 4, 2.5, 1, 1.5, 5, 4, 4, 4]}
+            averageRating={3}
+          />
+        </div>
       </div>
     </div>
   );
