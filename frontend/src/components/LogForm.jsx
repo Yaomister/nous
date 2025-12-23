@@ -3,17 +3,17 @@ import { Formik } from "formik";
 import { HeartIcon } from "./Icons";
 import { StarRating } from "./StarRating";
 
-export const LogForm = () => {
+export const LogForm = ({ details }) => {
   return (
     <div className="log-form-wrapper">
       <div className="log-form-cover-wrapper">
         <img
           className="book-cover"
-          src="https://m.media-amazon.com/images/I/811iBn28JdL._AC_UF894,1000_QL80_.jpg"
+          src={details.cover ? details.cover : "/images/white.png"}
         />
       </div>
       <div className="log-form-review-wrapper">
-        <h4 className="book-title">The Count Monte Cristo</h4>
+        <h4 className="book-title">{details.title}</h4>
 
         <Formik
           initialValues={{
@@ -59,7 +59,9 @@ export const LogForm = () => {
                 <div className="other-ratings">
                   <div className="star-rating-field-wrapper">
                     <p>Rating</p>
-                    <StarRating />
+                    <StarRating
+                      _rating={details.rating ? details._rating : 0}
+                    />
                   </div>
 
                   <div className="like-button-field-wrapper">

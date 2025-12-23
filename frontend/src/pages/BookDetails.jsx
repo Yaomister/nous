@@ -6,11 +6,19 @@ import { BookmarkIcon, EyeIcon, HeartIcon } from "../components/Icons";
 import { Modal } from "../components/Modal";
 import { LogForm } from "../components/LogForm";
 import { Histogram } from "../components/Histogram";
+import { api } from "../axios";
+import { useBookDetails } from "../hooks/UseBookDetails";
 
 export const BookDetails = () => {
   const { id } = useParams();
   const [showDetailsPage, setShowDetailsPage] = useState(true);
   const [showLogForm, setShowLogForm] = useState(false);
+
+  const { data, loading, error } = useBookDetails(id);
+
+  if (loading) return <div className="loading-text">Loading details</div>;
+
+  console.error(data);
 
   return (
     <div className="book-details-page-wrapper">
@@ -20,13 +28,15 @@ export const BookDetails = () => {
           close={() => setShowLogForm(false)}
           title={"Add a review"}
         >
-          <LogForm />
+          <LogForm
+            details={{ cover: data.cover, title: data.title, rating: 0 }}
+          />
         </Modal>
       )}
       <div className="book-details-top-half">
         <div className="book-details-progress-wrapper">
-          <h4 className="title">Title</h4>
-          <p className="author">by john doe</p>
+          <h4 className="title">{data.title}</h4>
+          <p className="author">{data.authors[0]}</p>
           <div className="progress-buttons-wrapper">
             <div className="progress-button-field">
               <button>
@@ -51,7 +61,7 @@ export const BookDetails = () => {
         <div className="book-details-cover-wrapper">
           <img
             className="book-cover"
-            src="https://m.media-amazon.com/images/I/811iBn28JdL._AC_UF894,1000_QL80_.jpg"
+            src={data.cover ? data.cover : "/images/white.png"}
           />
         </div>
       </div>
@@ -60,57 +70,26 @@ export const BookDetails = () => {
           <div className="book-description-wrapper">
             <h3 className="description-title">Description</h3>
             <p className="description">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae
-              sapien sed risus porttitor tempus. Sed aliquet purus quis metus
-              mattis, nec malesuada lacus rhoncus. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit. Praesent iaculis, augue vulputate
-              lobortis finibus, urna ante finibus felis, eu dapibus ipsum nibh a
-              odio. Proin eget neque lacinia, volutpat est quis, convallis
-              augue. Duis sed porttitor justo. Aliquam vel elementum neque, ac
-              convallis orci. Maecenas mollis nisl at egestas tincidunt. Proin
-              eget eleifend eros. Phasellus sapien lorem, mollis eget ipsum
-              eget, condimentum cursus orci. Nulla vehicula ipsum tellus, vel
-              posuere nisi hendrerit at. Nam nec sem nec urna imperdiet
-              lobortis. Aenean eu sapien ut purus egestas malesuada. Morbi
-              accumsan, quam id suscipit lacinia, mi tellus pellentesque mauris,
-              nec congue ipsum mauris eget lectus. Sed ullamcorper imperdiet
-              eleifend. Suspendisse velit est, venenatis vitae consequat in,
-              iaculis nec nunc. Aenean venenatis nulla tellus, eu finibus enim
-              convallis sed. Aenean a viverra ipsum, sed maximus lectus. Nunc
-              pretium felis eget ipsum interdum, quis ultricies sem malesuada.
-              Vestibulum augue erat, ultrices a facilisis sed, euismod sit amet
-              erat. Mauris vitae erat venenatis, volutpat sapien venenatis,
-              dictum ligula. Fusce non convallis urna. Ut eget pharetra mauris.
-              Nam varius ligula nulla, eget tincidunt justo pellentesque sit
-              amet. Morbi ut elit felis. Suspendisse condimentum eu risus
-              consequat pharetra. Suspendisse tempus in enim et aliquam. Sed ac
-              purus nec elit congue feugiat. Quisque id finibus elit. Vivamus
-              rutrum dignissim luctus. Aenean posuere commodo risus, quis
-              pretium urna dignissim quis. Donec magna felis, ornare a nibh at,
-              mattis dignissim dolor. Curabitur ultrices at metus ut sagittis.
-              Cras pellentesque lacinia interdum. Nullam posuere nisl sit amet
-              aliquet scelerisque. Cras eleifend pharetra risus volutpat
-              tincidunt. Proin eget sodales ligula. Donec felis est, porttitor
-              convallis orci a, mattis convallis massa.
+              {data.description || "No description avaliable"}
             </p>
 
             <div className="details-wrapper">
               <h3 className="details-title">Details</h3>
               <div className="details-field">
                 <h4>Pages</h4>
-                <p>100</p>
+                <p>{data.pages || "N/A"}</p>
               </div>
               <div className="details-field">
                 <h4>Released</h4>
-                <p>September 1st 2025</p>
+                <p>{data.release_date || "N/A"}</p>
               </div>
               <div className="details-field">
                 <h4>Language</h4>
-                <p>English</p>
+                <p>{data.language.toUpperCase() || "N/A"}</p>
               </div>
               <div className="details-field">
                 <h4>ISBN</h4>
-                <p>12312213213</p>
+                <p>{data.isbn || "N/A"}</p>
               </div>
             </div>
           </div>
@@ -132,3 +111,5 @@ export const BookDetails = () => {
     </div>
   );
 };
+
+// 3099025a-fea9-463f-86dd-c6509002fb16

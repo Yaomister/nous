@@ -13,10 +13,15 @@ class Book(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         primary_key=True, default=uuid.uuid4
     )
-    title: Mapped[str]
-    authors: Mapped[list[str]] = mapped_column(JSON)
-    cover: Mapped[str]
+    isbn: Mapped[str] = mapped_column(nullable=True)
+    release_date: Mapped[str] = mapped_column(nullable=True)
+    language: Mapped[str] = mapped_column(nullable=True)
+    pages: Mapped[int] = mapped_column(nullable=True)
+    title: Mapped[str] = mapped_column(nullable=False)
+    authors: Mapped[list[str]] = mapped_column(JSON, nullable=False)
+    cover: Mapped[str] 
     datePublished : Mapped[str]
+    description : Mapped[str] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(server_default=utcnow())
     updated_at: Mapped[datetime] = mapped_column(
         server_default=utcnow(), server_onupdate=utcnow(), onupdate=utcnow()
