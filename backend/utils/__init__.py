@@ -1,2 +1,2 @@
-from mappings import *
-from recommender import *
+from .mappings import *
+from .recommender import *

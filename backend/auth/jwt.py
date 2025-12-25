@@ -43,7 +43,7 @@ def create_refresh_token(payload: dict, minutes: int | None = None) -> JwtTokenS
     payload[EXP] = expire
 
     token = JwtTokenSchema(
-        token=jwt.encode(payload, config.SECRET_KEY, algorithm=config.ALGORITHM),
+        token=jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM),
         expire = expire,
         payload=payload
     )
