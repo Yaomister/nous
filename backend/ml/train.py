@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_session
 from  db import models, SessionFactory
 from .models.mf import MatrixFactorizationModel
 import numpy as np
-from .persistence import save_model
+from .helper import save_model
 import asyncio
 from sqlalchemy import text
 

@@ -1,5 +1,7 @@
 import numpy as np
 from pathlib import Path
+from models import MatrixFactorizationModel
+
 
 dir = Path("ml/models/saved")
 
@@ -13,3 +15,9 @@ def load_model(users, books):
     books = np.load(dir/ "books.npy")
 
     return users, books
+
+
+def update(model, u, b, rating):
+    for _ in range(5):
+        model.step(u, b, rating)
+    save_model(model.users, model.books)
