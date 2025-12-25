@@ -19,16 +19,34 @@ from auth import get_password_hash
 from auth.jwt import (
     create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, refresh_token_state_without_rotation,  add_refresh_token_cookie, mail_token, SUB, JTI, EXP, TYP
 )
+from auth import BadRequestException, NotFoundException, AuthFailedException, ForbiddenException
+
+
 
 
 
 import logging
-logger = logging.getLogger("validators")
 
-from auth import BadRequestException, NotFoundException, AuthFailedException, ForbiddenException
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
+
+
+logger = logging.getLogger("validators")
 
 
 router = APIRouter()
+
+async def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    db: AsyncSession = Depends(get_db),
+) -> User:
+    payload = await decode_token_with_blacklisted(token, db=db)
+    user = await User.find_by_id(db, payload[SUB])
+
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    return user
 
 
 @router.post("/register", response_model=schemas.User, status_code=201)
@@ -84,6 +102,7 @@ async def login(
 
     return {"token" : token_Pair.access.token}
     
+
 
 
 @router.post("/reset-password-link")
@@ -142,3 +161,11 @@ async def refresh(
     user = await User.find_by_id(db=db, id = payload[SUB])
 
     return await refresh_token_state_with_rotation(response=response, payload=payload, user=user, db=db)
+
+@router.get("/me")
+async def get_me(current_user: User = Depends(get_current_user)):
+    return {
+        "username" : current_user.username
+    }
+
+   

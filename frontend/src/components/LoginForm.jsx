@@ -5,9 +5,11 @@ import "../stylesheets/LoginForm.css";
 import { api } from "../axios";
 import { useNavigate } from "react-router-dom";
 import { useTokenStore } from "../token.js";
+import { useAuth } from "./AuthContext.jsx";
 
 export const LoginForm = () => {
   const setToken = useTokenStore.getState().setToken;
+  const { login } = useAuth();
 
   const navigate = useNavigate();
   return (
@@ -27,6 +29,7 @@ export const LoginForm = () => {
 
             if (status === 200) {
               setToken(data.token);
+              login();
               toast.success("Successfully logged in!", {
                 onClose: () => navigate("/"),
               });

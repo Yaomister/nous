@@ -1,0 +1,32 @@
+.nav-bar-wrapper {
+  position: sticky;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: var(--inner-filling-color);
+}
+
+.nav-bar {
+  margin-top: 0.5em;
+  margin-bottom: 0.3em;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-bar .logo {
+  color: var(--text-color-secondary);
+}
+
+.nav-bar-links {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 40%;
+}
+
+.nav-bar-links a {
+  font-size: 1.15em;
+  text-decoration: none;
+}
