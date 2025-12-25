@@ -3,10 +3,12 @@ import { UseExplore } from "../hooks/UseExplore";
 import { useNavigate } from "react-router-dom";
 
 import "../stylesheets/Explore.css";
+import { useState } from "react";
 
 export const Explore = () => {
   const { data, loading } = UseExplore();
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
 
   if (loading) return <div>Loading explore page</div>;
 
@@ -15,13 +17,23 @@ export const Explore = () => {
   return (
     <div className="explore-page-wrapper">
       <div className="search-bar-wrapper">
-        <div className="search-bar">
-          <SearchIcon />
-          <input
-            className="bar"
-            placeholder="Search for books, authors or paste ISBN"
-          ></input>
-        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            navigate(`/search/${query}`);
+          }}
+        >
+          <div className="search-bar">
+            <SearchIcon />
+            <input
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+              className="bar"
+              placeholder="Search for books, authors or paste ISBN"
+            ></input>
+          </div>
+        </form>
       </div>
       <div className="recommended-wrapper">
         <h4>Recommended for you</h4>

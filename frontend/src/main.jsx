@@ -11,6 +11,7 @@ import { Recover } from "./pages/Recover.jsx";
 import { ResetPassword } from "./pages/ResetPassword.jsx";
 import { BookDetails } from "./pages/BookDetails.jsx";
 import { Explore } from "./pages/Explore.jsx";
+import { PageNotFound } from "./pages/PageNotFound.jsx";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -42,6 +43,11 @@ const App = () => {
         {
           path: "/explore",
           element: <Explore></Explore>,
+        },
+
+        {
+          path: "/*",
+          element: <PageNotFound></PageNotFound>,
         },
       ],
     },
