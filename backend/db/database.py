@@ -1,7 +1,7 @@
 from typing import Any
 from fastapi import HTTPException, status
 from pydantic import PostgresDsn
-import config
+from config import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB
 
 
 from sqlalchemy import select
@@ -14,11 +14,11 @@ from sqlalchemy.orm import DeclarativeBase
 
 POSTGRES_URL = PostgresDsn.build(
     scheme="postgresql+asyncpg",
-    username=config.POSTGRES_USER,
-    password=config.POSTGRES_PASSWORD,
-    host=config.POSTGRES_HOST,
-    port=int(config.POSTGRES_PORT),
-    path=config.POSTGRES_DB,
+    username=POSTGRES_USER,
+    password=POSTGRES_PASSWORD,
+    host=POSTGRES_HOST,
+    port=int(POSTGRES_PORT),
+    path=POSTGRES_DB,
 )
 
 

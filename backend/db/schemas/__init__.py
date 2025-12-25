@@ -1,4 +1,4 @@
 from .users import *
 from .books import *
-from .interactions import *
+from .reviews import *
 from .lists import *

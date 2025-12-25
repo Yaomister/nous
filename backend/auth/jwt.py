@@ -6,7 +6,7 @@ from jose import jwt, JWTError
 from fastapi import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import config
+from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRES_MINUTES, REFRESH_TOKEN_EXPIRES_MINUTES
 from db import User
 from db import TokenPair, JwtTokenSchema
 from .exceptions import AuthFailedException
@@ -24,12 +24,12 @@ def get_utc_now():
 
 
 def create_access_token( payload: dict, minutes: int| None = None) -> JwtTokenSchema:
-    expire = get_utc_now() + timedelta(minutes= minutes or config.ACCESS_TOKEN_EXPIRES_MINUTES)
+    expire = get_utc_now() + timedelta(minutes= minutes or ACCESS_TOKEN_EXPIRES_MINUTES)
 
     payload[EXP] = expire
 
     token = JwtTokenSchema(
-        token=jwt.encode(payload, config.SECRET_KEY, algorithm=config.ALGORITHM),
+        token=jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM),
         expire = expire,
         payload = payload
     )
@@ -38,7 +38,7 @@ def create_access_token( payload: dict, minutes: int| None = None) -> JwtTokenSc
 
 
 def create_refresh_token(payload: dict, minutes: int | None = None) -> JwtTokenSchema:
-    expire = get_utc_now() + timedelta(minutes=minutes or config.REFRESH_TOKEN_EXPIRES_MINUTES)
+    expire = get_utc_now() + timedelta(minutes=minutes or REFRESH_TOKEN_EXPIRES_MINUTES)
 
     payload[EXP] = expire
 
@@ -61,7 +61,7 @@ def create_token_pair(user : User) -> TokenPair:
 
 async def decode_token_with_blacklisted(token: str, db: AsyncSession):
     try:
-        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         blacklist_token = await models.BlackListToken.find_by_id(db=db, id=payload.get(JTI))
         if (blacklist_token):
             raise JWTError("Token has been blacklisted")
@@ -80,14 +80,10 @@ async def refresh_token_state_with_rotation(response: Response, payload: dict, u
         id=payload[JTI], expire=exp
     )
 
-    print('___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________')
-    print("1")
+
     await black_listed.save(db =db)
-    print("2")
     token_pair = create_token_pair(user=user)
-    print("3")
     add_refresh_token_cookie(response=response, token = token_pair.refresh.token)
-    print("4")
 
     return {"token" : token_pair.access.token}
 
@@ -95,7 +91,7 @@ async def refresh_token_state_with_rotation(response: Response, payload: dict, u
 
 async def refresh_token_state_without_rotation(token: str):
     try:
-        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
     except JWTError:
         raise AuthFailedException()
@@ -112,7 +108,7 @@ def mail_token(user: User, type: Optional[str]):
 
 
 def add_refresh_token_cookie(response: Response, token: str):
-    exp = get_utc_now() + timedelta(minutes=config.REFRESH_TOKEN_EXPIRES_MINUTES)
+    exp = get_utc_now() + timedelta(minutes=REFRESH_TOKEN_EXPIRES_MINUTES)
     exp.replace(tzinfo=timezone.utc)
 
     response.set_cookie(

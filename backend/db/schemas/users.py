@@ -43,7 +43,6 @@ class UserRegister(UserBase):
     @classmethod
     def verify_username(cls, value, **kwargs):
         if not value or not re.fullmatch(r"^[A-Za-z0-9_]+$", value) or len(value) > 20:
-            print(value)
             raise ValueError("Invalid username")
         return value
 
@@ -52,7 +51,6 @@ class UserRegister(UserBase):
     def verify_password_match(cls, value, **kwargs):
         print(value)
         if not value or (len(value) < 8) or not re.search(r"[`!@#$%^&*()_+\-=\[\]{};':\"\\|,.<>/?~]", value):
-            print(value)
             raise ValueError("Invalid password")
         return value
     

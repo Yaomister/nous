@@ -18,8 +18,6 @@ export const BookDetails = () => {
 
   if (loading) return <div className="loading-text">Loading details</div>;
 
-  console.error(data);
-
   return (
     <div className="book-details-page-wrapper">
       {showLogForm && (

@@ -4,6 +4,7 @@ import { HeartIcon } from "./Icons";
 import { StarRating } from "./StarRating";
 import { api } from "../axios";
 import toast, { Toaster } from "react-hot-toast";
+import { verifyLog } from "../helpers/BookHelpers";
 
 export const LogForm = ({ details }) => {
   return (
@@ -35,6 +36,8 @@ export const LogForm = ({ details }) => {
               like: values.like,
               rating: values.rating,
             });
+            const errors = verifyLog(values);
+            if (errors.length > 0) return toast.error(errors[0]);
             try {
               const { status } = await api.post("/book/post", {
                 read_before: values.readBefore,
