@@ -17,8 +17,10 @@ from db import User
 from config import REFRESH_TOKEN_ROTATION
 from auth import get_password_hash
 from auth.jwt import (
-    create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, add_refresh_token_cookie, mail_token, SUB, JTI, EXP, TYP
+    create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, refresh_token_state_without_rotation,  add_refresh_token_cookie, mail_token, SUB, JTI, EXP, TYP
 )
+
+
 
 import logging
 logger = logging.getLogger("validators")
@@ -28,7 +30,6 @@ from auth import BadRequestException, NotFoundException, AuthFailedException, Fo
 
 router = APIRouter()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 @router.post("/register", response_model=schemas.User, status_code=201)
 async def register(
@@ -123,94 +124,21 @@ async def reset_password(
 
     return {"msg" : "Password successfully updated"}
 
+@router.post("/refresh")
+async def refresh(
+    response: Response,
+    refresh: Annotated[str | None, Cookie()] = None,
+    db: AsyncSession = Depends(get_db)
+):
 
-# @router.post("refresh")
-# async def refresh(
-#     response: Response,
-#     refresh: Annotated[str | None, Cookie()] = None,
-#     db: AsyncSession = Depends(get_db)
-# ):
-#     if not refresh:
-#         raise BadRequestException("Refresh token required")
+    if not refresh:
+        raise BadRequestException(detail="Request token required")
     
-
-#     if not REFRESH_TOKEN_ROTATION:return refresh_token_state_without_rotation(token=refresh)
-
-#     payload = await decode_token_with_blacklisted(token=refresh)
-#     user = await userSchemas.USer.find_by_id(db=db, id=payload[SUB])
-
-#     return await refresh_token_state_with_rotation(
-#         response=response,
-#         payload=payload,
-#         user=user,
-#         db=db
-#     )
-
-
-# @router.get("/verify", response_model=userSchemas.SuccessResponseSchema)
-# async def verify(token: str, db: AsyncSession = Depends(get_db)):
-#     payload = await decode_token_with_blacklisted(token = token, db=db)
-#     user = await userSchemas.User.find_by_id(db=db, id=payload[SUB])
-#     if not user:
-#         raise NotFoundException(detail="User not found")
+    if not REFRESH_TOKEN_ROTATION:
+        return refresh_token_state_without_rotation(token = refresh)
     
-#     user.is_active = True
-#     await user.save(db=db)
-#     return {"msg": "Successfully activated"}
-
-# @router.post("/logout", response_model= userSchemas.SuccessResponseSchema)
-# async def logout(
-#     token: Annotated[str, Depends(oauth2_scheme)],
-#     db: AsyncSession= Depends(get_db)
-# ):
+    payload = await decode_token_with_blacklisted(token=refresh, db=db)
     
-#     payload = await decode_token_with_blacklisted(token=token, db=db)
-#     black_listed= userSchemas.BlackListToken(
-#         id=payload[JTI], expire=datetime.fromtimestamp(payload["exp"], tz=timezone.utc)
-#     )
+    user = await User.find_by_id(db=db, id = payload[SUB])
 
-#     await black_listed.save(db=db)
-
-#     return {"msg" : "Successfully logout"}
-
-
-
-
-# @router.post("/password-update", response_model=userSchemas.SuccessResponseSchema)
-# async def password_update(
-#     token: Annotated[str, Depends(oauth2_scheme)],
-#     data: userSchemas.PasswordUpdateSchema,
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     payload = await decode_token_with_blacklisted(token = token, db=db)
-#     user = await userSchemas.User.find_by_id(db=db, id=payload[SUB])
-#     if not user:
-#         raise NotFoundException(detail="User no found")
-    
-#     if not verify(data.old_password, user.password):
-#         try: 
-#             user.OldPasswordErrorSchema(old_passsword=False)
-#         except ValidationError as e:
-#             raise RequestValidationError(e.raw_errors)
-#     user.password = get_password_hash(data.password)
-#     await user.save(db=db)
-
-#     return {"msg" : "Successfully updated"}
-
-
-# @router.get("/books")
-# async def articles(
-#     token: Annotated[str, Depends(oauth2_scheme)],
-#     db: AsyncSession = Depends(get_db),
-# ):
-#     payload = await decode_token_with_blacklisted(token=token, db=db)
-#     user = await decode_token_with_blacklisted(token=token, db=db)
-#     if not user:
-#         raise NotFoundException(detail="User not found")
-    
-#     # Get the books
-
-
-    
-
-
+    return await refresh_token_state_with_rotation(response=response, payload=payload, user=user, db=db)

@@ -3,11 +3,12 @@ import toast, { Toaster } from "react-hot-toast";
 
 import "../stylesheets/LoginForm.css";
 import { api } from "../axios";
-import { useAuth } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useTokenStore } from "../token.js";
 
 export const LoginForm = () => {
-  const { setBearerToken } = useAuth();
+  const setToken = useTokenStore.getState().setToken;
+
   const navigate = useNavigate();
   return (
     <div className="login-form-wrapper">
@@ -20,12 +21,12 @@ export const LoginForm = () => {
         }}
         onSubmit={async (values) => {
           try {
-            const { status, statusText, data } = await api.post(
-              "/user/login",
-              values
-            );
+            const { status, data } = await api.post("/user/login", values, {
+              withCredentials: true,
+            });
+
             if (status === 200) {
-              setBearerToken(data.token);
+              setToken(data.token);
               toast.success("Successfully logged in!", {
                 onClose: () => navigate("/"),
               });

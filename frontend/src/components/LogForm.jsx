@@ -2,10 +2,13 @@ import "../stylesheets/LogForm.css";
 import { Formik } from "formik";
 import { HeartIcon } from "./Icons";
 import { StarRating } from "./StarRating";
+import { api } from "../axios";
+import toast, { Toaster } from "react-hot-toast";
 
 export const LogForm = ({ details }) => {
   return (
     <div className="log-form-wrapper">
+      <Toaster></Toaster>
       <div className="log-form-cover-wrapper">
         <img
           className="book-cover"
@@ -23,10 +26,38 @@ export const LogForm = ({ details }) => {
             rating: 0,
             like: false,
           }}
+          onSubmit={async (values) => {
+            console.error({
+              read_before: values.readBefore,
+              would_recommend: values.wouldRecommend,
+              book_id: details.book_id,
+              review: values.review,
+              like: values.like,
+              rating: values.rating,
+            });
+            try {
+              const { status } = await api.post("/book/post", {
+                read_before: values.readBefore,
+                would_recommend: values.wouldRecommend,
+                book_id: details.book_id,
+                review: values.review,
+                like: values.like,
+                rating: values.rating,
+              });
+
+              if (status == 200) {
+                toast.success("Successfully logged review!");
+              } else {
+                toast.error("Could not log review");
+              }
+            } catch (err) {
+              toast.error("Could not log review");
+            }
+          }}
         >
           {(formik) => {
             return (
-              <form className="log-form">
+              <form className="log-form" onSubmit={formik.handleSubmit}>
                 <div className="checkbox-fields">
                   <div className="checkbox-field">
                     <input
@@ -61,13 +92,29 @@ export const LogForm = ({ details }) => {
                     <p>Rating</p>
                     <StarRating
                       _rating={details.rating ? details._rating : 0}
+                      action={(rating) => {
+                        formik.setFieldValue("rating", rating);
+                      }}
                     />
                   </div>
 
                   <div className="like-button-field-wrapper">
                     <p>Like</p>
-                    <HeartIcon />
+                    <button
+                      type="button"
+                      className={`like-button ${
+                        formik.values.like ? "liked" : ""
+                      }`}
+                      onClick={() => {
+                        formik.setFieldValue("like", !formik.values.like);
+                      }}
+                    >
+                      <HeartIcon />
+                    </button>
                   </div>
+                </div>
+                <div className="save-button-wrapper">
+                  <button type="submit">Save</button>
                 </div>
               </form>
             );

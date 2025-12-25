@@ -38,12 +38,12 @@ def create_access_token( payload: dict, minutes: int| None = None) -> JwtTokenSc
 
 
 def create_refresh_token(payload: dict, minutes: int | None = None) -> JwtTokenSchema:
-    expire = get_utc_now() + timedelta(minutes=minutes or config.REFRESH_TOKEN_ROTATION_MINUTES)
+    expire = get_utc_now() + timedelta(minutes=minutes or config.REFRESH_TOKEN_EXPIRES_MINUTES)
 
     payload[EXP] = expire
 
     token = JwtTokenSchema(
-        token=jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM),
+        token=jwt.encode(payload, config.SECRET_KEY, algorithm=config.ALGORITHM),
         expire = expire,
         payload=payload
     )
@@ -55,7 +55,7 @@ def create_token_pair(user : User) -> TokenPair:
 
     return TokenPair(
         access=create_access_token(payload={**payload}),
-        refresh=create_access_token(payload={**payload})
+        refresh=create_refresh_token(payload={**payload})
     )
 
 
@@ -72,15 +72,22 @@ async def decode_token_with_blacklisted(token: str, db: AsyncSession):
     return payload
 
 async def refresh_token_state_with_rotation(response: Response, payload: dict, user : DBUser, db: AsyncSession):
-    exp = datetime.fromtimestamp(payload.get(EXP))
-    exp = exp.replace(tzinfo=timezone.utc)
-    black_listed = BlackListToken(
+    exp = datetime.fromtimestamp(payload['exp'])
+    exp.replace(tzinfo=timezone.utc)
+
+
+    black_listed = models.BlackListToken(
         id=payload[JTI], expire=exp
     )
-    await black_listed.save(db =db)
-    token_pair = create_token_pair(user=user)
 
+    print('___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________')
+    print("1")
+    await black_listed.save(db =db)
+    print("2")
+    token_pair = create_token_pair(user=user)
+    print("3")
     add_refresh_token_cookie(response=response, token = token_pair.refresh.token)
+    print("4")
 
     return {"token" : token_pair.access.token}
 
@@ -107,9 +114,13 @@ def mail_token(user: User, type: Optional[str]):
 def add_refresh_token_cookie(response: Response, token: str):
     exp = get_utc_now() + timedelta(minutes=config.REFRESH_TOKEN_EXPIRES_MINUTES)
     exp.replace(tzinfo=timezone.utc)
+
     response.set_cookie(
-        key= REFRESH_COOKIE_NAME,
+        key="refresh",
         value=token,
         expires=int(exp.timestamp()),
         httponly=True,
+        #  REQUIRED FOR DEV
+        samesite="lax", 
+        secure=False, 
     )

@@ -112,8 +112,3 @@ class OldPasswordErrorSchema(BaseModel):
 def check_old_password_status(cls, value, values, **kwargs):
     if not value:
         raise ValueError("Old password is not correct")
-
-
-class BookRatingCreateSchema(BaseModel):
-    book_id: UUID4
-    rating: float

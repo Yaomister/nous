@@ -29,7 +29,12 @@ export const BookDetails = () => {
           title={"Add a review"}
         >
           <LogForm
-            details={{ cover: data.cover, title: data.title, rating: 0 }}
+            details={{
+              cover: data.cover,
+              title: data.title,
+              rating: 0,
+              book_id: data.id,
+            }}
           />
         </Modal>
       )}

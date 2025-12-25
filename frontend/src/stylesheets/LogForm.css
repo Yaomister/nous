@@ -35,6 +35,7 @@
   display: flex;
   flex-direction: column;
   gap: 1em;
+  z-index: 1000;
 }
 
 .log-form .checkbox-fields {
@@ -79,5 +80,37 @@
   font-size: 12px;
 }
 
-.log-form .like-button-field-wrapper svg {
+.log-form .heart-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  flex-shrink: 0;
+  color: #444;
+  transition: ease-in-out 0.3s;
+}
+
+.log-form .heart-icon:hover {
+  color: #838383;
+}
+
+.log-form .like-button-field-wrapper .like-button.liked svg {
+  color: rgb(177, 142, 0);
+}
+
+.log-form .like-button-field-wrapper .like-button {
+  border: none;
+}
+
+.log-form .save-button-wrapper {
+  width: 100%;
+  margin-top: 1em;
+  display: flex;
+}
+
+.log-form .save-button-wrapper button {
+  background: green;
+  padding: 0.25em 0.5em;
+  color: white;
+  font-size: 14px;
+  font-family: var(--font-primary);
 }

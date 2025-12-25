@@ -1,14 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { api } from "../axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [bearerToken, setBearerToken] = useState("");
-  return (
-    <AuthContext.Provider value={{ bearerToken, setBearerToken }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{}}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => useContext(AuthContext);
