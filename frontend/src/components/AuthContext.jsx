@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
 
   const loadUser = useCallback(async () => {
-    console.error("LOADING USER");
     const token = useTokenStore.getState().token;
     console.error(token);
     if (!token) {
@@ -25,9 +24,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data: _user } = await api.get("/user/me");
       setUser(_user);
-      console.error("SET USER");
     } catch (err) {
-      console.error(err);
       setUser(null);
     }
   }, []);
@@ -37,7 +34,6 @@ export const AuthProvider = ({ children }) => {
   }, [loadUser]);
 
   const login = useCallback(async () => {
-    console.error("FUCKING LOGIN CALLED");
     loadUser();
   }, [loadUser]);
 

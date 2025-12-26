@@ -4,13 +4,14 @@ import { useNavigate } from "react-router-dom";
 
 import "../stylesheets/Explore.css";
 import { useState } from "react";
+import { Loading } from "../components/Loading";
 
 export const Explore = () => {
   const { data, loading } = UseCatalog();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  if (loading) return <div>Loading explore page</div>;
+  if (loading) return <Loading />;
 
   const { recommended, popular } = data;
 

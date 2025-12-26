@@ -13,6 +13,7 @@ import { BookDetails } from "./pages/BookDetails.jsx";
 import { Explore } from "./pages/Explore.jsx";
 import { PageNotFound } from "./pages/PageNotFound.jsx";
 import { Home } from "./pages/Home.jsx";
+import { Search } from "./pages/Search.jsx";
 
 const ProtectRoute = ({ children }) => {
   const { user } = useAuth();
@@ -58,6 +59,11 @@ const App = () => {
         {
           path: "/explore",
           element: <Explore></Explore>,
+        },
+
+        {
+          path: "/search/:query",
+          element: <Search></Search>,
         },
 
         {

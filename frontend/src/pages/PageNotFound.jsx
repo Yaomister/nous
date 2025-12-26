@@ -11,7 +11,7 @@ export const PageNotFound = () => {
         <div className="page-not-found-message">
           <h1>404</h1>
           <h2>Why are you here?</h2>
-          <a>Back to home page</a>
+          <a href="/">Back to home page</a>
         </div>
       </div>
     </div>

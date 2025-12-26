@@ -1,3 +1,4 @@
+import { Loading } from "../components/Loading";
 import { UseCatalog } from "../hooks/UseCatalog";
 import "../stylesheets/Home.css";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,8 @@ export const Home = () => {
   const { data, loading } = UseCatalog();
   const navigate = useNavigate();
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loading />;
+
   const { trending } = data;
   return (
     <div className="home-wrapper">

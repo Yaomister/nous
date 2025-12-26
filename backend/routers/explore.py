@@ -14,6 +14,7 @@ from sqlalchemy import text, select
 from auth.jwt import (
     create_token_pair, decode_token_with_blacklisted, refresh_token_state_with_rotation, add_refresh_token_cookie, mail_token, SUB, JTI, EXP, TYP
 )
+import math
 
 
 
@@ -50,6 +51,27 @@ SELECT books.id FROM books JOIN posts ON posts.book_id = books.id WHERE posts.cr
     )
 
     return books.scalars().all()
+
+
+
+@router.get("/search/{query}/{page}")
+async def search(query: str, page : int, db : AsyncSession = Depends(get_db)):
+    result = await db.execute(text("""SELECT COUNT(*) OVER() as total_count,* FROM books WHERE title ILIKE '%' || :q || '%' OR isbn ILIKE '%' || :q || '%' OR EXISTS(SELECT 1 FROM  json_array_elements_text(authors) AS author WHERE author ILIKE '%' || :q || '%') LIMIT :limit OFFSET :offset"""),  {"q" : query, "offset" : (page - 1) * 12, "limit" : 12})
+    
+    rows = result.mappings().all()
+
+    total_count = rows[0]["total_count"] if rows else 0
+
+    books = [
+        {k: v for k, v in row.items() if k != "total_count" }for row in rows
+    ]
+
+
+
+    return {
+        "books" : books,
+        "total_pages" : math.ceil(total_count/32)
+    }
 
 
 

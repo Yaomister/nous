@@ -6,8 +6,8 @@ import { BookmarkIcon, EyeIcon, HeartIcon } from "../components/Icons";
 import { Modal } from "../components/Modal";
 import { LogForm } from "../components/LogForm";
 import { Histogram } from "../components/Histogram";
-import { api } from "../axios";
 import { useBookDetails } from "../hooks/UseBookDetails";
+import { Loading } from "../components/Loading";
 
 export const BookDetails = () => {
   const { id } = useParams();
@@ -16,7 +16,7 @@ export const BookDetails = () => {
 
   const { data, loading, error } = useBookDetails(id);
 
-  if (loading) return <div className="loading-text">Loading details</div>;
+  if (loading) return <Loading />;
 
   return (
     <div className="book-details-page-wrapper">
