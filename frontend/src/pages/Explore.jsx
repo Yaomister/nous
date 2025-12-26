@@ -1,12 +1,12 @@
 import { SearchIcon } from "../components/Icons";
-import { UseExplore } from "../hooks/UseExplore";
+import { UseCatalog } from "../hooks/UseCatalog";
 import { useNavigate } from "react-router-dom";
 
 import "../stylesheets/Explore.css";
 import { useState } from "react";
 
 export const Explore = () => {
-  const { data, loading } = UseExplore();
+  const { data, loading } = UseCatalog();
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 

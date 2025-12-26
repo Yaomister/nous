@@ -1,0 +1,82 @@
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+  align-items: center;
+}
+
+.trending-books-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  margin-top: 4em;
+}
+
+.trending-books-wrapper .greeting-text {
+  font-size: 1.75em;
+  margin-bottom: 0;
+  font-family: var(--font-primary);
+  font-weight: 200;
+}
+
+.trending-books-wrapper p {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+.trending-books {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  margin-top: 3em;
+}
+
+.trending-book img {
+  height: 15em;
+  border-radius: 8px;
+  transition: 0.3s ease-in-out;
+}
+
+.trending-book img:hover {
+  transform: scale(1.05);
+}
+
+.stats-wrapper {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-wrapper h4 {
+  padding-left: 3em;
+}
+
+.stats {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px rgba(255, 255, 255, 0.2) solid;
+  width: 30%;
+  padding: 4em 0;
+}
+
+.stat h1 {
+  color: var(--text-color-primary);
+  font-size: 3em;
+  font-weight: 200;
+  margin: 0;
+}
+
+.stat p {
+  margin: 0;
+}

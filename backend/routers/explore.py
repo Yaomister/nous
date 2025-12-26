@@ -37,6 +37,21 @@ SELECT books.id FROM books JOIN posts ON posts.book_id = books.id GROUP BY books
 
     return books.scalars().all()
 
+@router.get("/trending")
+async def trending(k: int = 10, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(text("""
+SELECT books.id FROM books JOIN posts ON posts.book_id = books.id WHERE posts.created_at >= NOW() - INTERVAL '7 days' GROUP BY books.id ORDER BY COUNT(posts.id) DESC LIMIT :k
+"""), {"k" : k})
+    
+    book_ids = result.scalars().all()
+
+    books = await db.execute(
+        select(models.Book).where(models.Book.id.in_(book_ids))
+    )
+
+    return books.scalars().all()
+
+
 
 
 

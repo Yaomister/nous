@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../axios";
 
-export const UseExplore = () => {
+export const UseCatalog = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const [error, setError] = useState();
@@ -11,9 +11,10 @@ export const UseExplore = () => {
       try {
         const { data: recommended } = await api.get(`/explore/recommend`);
         const { data: popular } = await api.get("/explore/popular");
+        const { data: trending } = await api.get("/explore/trending");
 
         if (recommended && popular) {
-          setData({ recommended, popular });
+          setData({ recommended, popular, trending });
           setLoading(false);
         }
       } catch (e) {

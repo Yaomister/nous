@@ -6,18 +6,29 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import { Register } from "./pages/Register.jsx";
-import { AuthProvider } from "./components/AuthContext.jsx";
+import { AuthProvider, useAuth } from "./components/AuthContext.jsx";
 import { Recover } from "./pages/Recover.jsx";
 import { ResetPassword } from "./pages/ResetPassword.jsx";
 import { BookDetails } from "./pages/BookDetails.jsx";
 import { Explore } from "./pages/Explore.jsx";
 import { PageNotFound } from "./pages/PageNotFound.jsx";
+import { Home } from "./pages/Home.jsx";
+
+const ProtectRoute = ({ children }) => {
+  const { user } = useAuth();
+  if (user) return children;
+  return <Navigate to="/" replace />;
+};
 
 const App = () => {
   const router = createBrowserRouter([
     {
       element: <Page></Page>,
       children: [
+        {
+          path: "/",
+          element: <Home></Home>,
+        },
         {
           path: "/login",
           element: <Login></Login>,
@@ -37,7 +48,11 @@ const App = () => {
 
         {
           path: "/book/:id",
-          element: <BookDetails></BookDetails>,
+          element: (
+            <ProtectRoute>
+              <BookDetails />
+            </ProtectRoute>
+          ),
         },
 
         {
